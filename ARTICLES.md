@@ -7,6 +7,9 @@
 
 ## Visibility operations
 
+- shapely
+- geopandas
+
 - scikit-geometry
 
     ### Installation
