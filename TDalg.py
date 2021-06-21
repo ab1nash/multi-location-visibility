@@ -268,8 +268,10 @@ def dequeue(x:{}):
 # %%
 def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
     '''
-        Main algorithm from MV paper: Query Centric Distance based approach
+        Main algorithm from MV paper: Target based approach
     '''
+    IOaccess = 0
+    obsSet = set()
     kNew = k
     L = []
     L_vis = []
@@ -303,6 +305,7 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
         # Enqueue all obs
         for nodeId in nodeList[1]:
             # 1.12
+            IOaccess += 1
             node = getScaledNode(gdf.iloc[nodeId].geometry)
             for ix in Q.index:
                 queryPoint = getScaledPoint(ix,Q)
@@ -316,6 +319,8 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
         node = getScaledNode(gdf.iloc[nodeId].geometry)
         for qp in VQ.keys():
             if (nodeId in LO[qp]):
+                IOaccess += 1
+                obsSet.add(nodeId)
                 queryPoint_i = getScaledPoint(qp,Q)
                 vrset[qp] = updateVisibility(asPoint2(queryPoint_i),T,arr,vrset[qp],node)
                 vrPoly[qp] = buildVRPolygons(vrset[qp],queryPoint_i)
@@ -337,7 +342,7 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
                 end = True
                 cont = False
             if(len(L) == kNew):
-                return L, L_vis, L_vrPoly, vrPoly
+                return L, L_vis, L_vrPoly, vrPoly, IOaccess, len(obsSet)
 
-    return L, L_vis, L_vrPoly, vrPoly
+    return L, L_vis, L_vrPoly, vrPoly, IOaccess, len(obsSet)
     # -----------------END--------------------

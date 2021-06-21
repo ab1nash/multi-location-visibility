@@ -276,8 +276,10 @@ def getImpactRatio(vrOld:list, vrNew:list, queryPoint:Point):
 # %%
 def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
     '''
-        Main algorithm from MV paper: Query Centric Distance based approach
+        Main algorithm from MV paper: Query Centric Visibility based approach
     '''
+    IOaccess = 0
+    obsSet = set()
     kNew = k
     L = []
     L_vis = []
@@ -309,11 +311,13 @@ def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
         for nodeId in treeTrav:
             # 1.12
             if(nodeId not in CO):
+                IOaccess += 1
                 node = getScaledNode(gdf.iloc[nodeId].geometry)
                 for ix in Q.index:
                     queryPoint = getScaledPoint(ix,Q)
                     if(Boundary.contains(queryPoint)== True):
                         if(insideVisibleRegion(vrPoly[ix],node) == True):
+                            obsSet.add(nodeId)
                             vrCompare = updateVisibility(asPoint2(queryPoint),T,outer,vrset[ix],node)
                             impact = getImpactRatio(vrset[ix],vrCompare,queryPoint)
                             LO[ix]=enqueue(LO[ix],nodeId,impact)
@@ -338,6 +342,8 @@ def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
                 #     return L, L_vis, L_vrPoly, vrPoly
 
             elif (nodeId not in CO):
+                IOaccess += 1
+                obsSet.add(nodeId)
                 node = getScaledNode(gdf.iloc[nodeId].geometry)
                 if(insideVisibleRegion(vrPoly[current_best],node) == True):
                     queryPoint = getScaledPoint(current_best,Q)
@@ -358,5 +364,5 @@ def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
                 val = getLength(vrset[current_best], queryPoint)
                 VQ = enqueue(VQ, Q['id'][current_best], -1*val)
                 cont = False
-    return L, L_vis, L_vrPoly, vrPoly
+    return L, L_vis, L_vrPoly, vrPoly, IOaccess, len(obsSet)
     # -----------------END--------------------
