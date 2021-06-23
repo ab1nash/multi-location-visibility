@@ -285,10 +285,10 @@ def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
     L_vis = []
     L_vrPoly = []
     VQ = {}
-    LO = [{} for _ in range(len(Q.index))]
+    LO = [{} for _ in range(200)]
     CO = set()
-    vrset = np.empty(len(Q.index),dtype=object)
-    vrPoly = np.empty(len(Q.index),dtype=object)
+    vrset = np.empty(200,dtype=object)
+    vrPoly = np.empty(200,dtype=object)
     end = False
     cont = True
     node = 0 # ?
@@ -301,7 +301,7 @@ def QVkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
             # Enqueue in VQ
             val = getLength(vrset[ix], queryPoint)
             VQ = enqueue(VQ, Q['id'][ix], -1*val)
-    print("Phase 1 OK!")
+    # print("Phase 1 OK!")
     # 1.11
     for nodeList in gdf.sindex.leaves():
         # print('1')

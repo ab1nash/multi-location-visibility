@@ -299,12 +299,14 @@ def plotFinal(scaledTarget,rtree1,gdf,qpGdf,vrPolygons,ans_vrPoly,ans):
         QPlist.append(getScaledPoint(ix,qpGdf))
     VRlist = []
     for ix1 in vrPolygons:
-        for ix2 in ix1:
-            VRlist.append(ix2)
+        if ix1:
+            for ix2 in ix1:
+                VRlist.append(ix2)
     ansVRlist = []
     for ix1 in ans_vrPoly:
-        for ix2 in ix1:
-            ansVRlist.append(ix2)
+        if ix1:
+            for ix2 in ix1:
+                ansVRlist.append(ix2)
     Alist = []
     for ix in ans:
         Alist.append(getScaledPoint(ix,qpGdf))

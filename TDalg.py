@@ -266,7 +266,7 @@ def dequeue(x:{}):
 
 
 # %%
-def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
+def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arrg):
     '''
         Main algorithm from MV paper: Target based approach
     '''
@@ -277,10 +277,10 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
     L_vis = []
     L_vrPoly = []
     VQ = {}
-    LO = [set() for _ in range(len(Q.index))]
+    LO = [set() for _ in range(200)]
     TQ = {}
-    vrset = np.empty(len(Q.index),dtype=object)
-    vrPoly = np.empty(len(Q.index),dtype=object)
+    vrset = np.empty(200,dtype=object)
+    vrPoly = np.empty(200,dtype=object)
     end = False
     cont = True
     
@@ -294,12 +294,12 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
         queryPoint = getScaledPoint(ix,Q)
         if(Boundary.contains(queryPoint)== True):
             # UpdateVisibility
-            vrset[ix] = updateVisibility(asPoint2(queryPoint),T,arr)
+            vrset[ix] = updateVisibility(asPoint2(queryPoint),T,arrg)
             vrPoly[ix] = buildVRPolygons(vrset[ix],queryPoint)
             # Enqueue in VQ
             val = getLength(vrset[ix], queryPoint)
             VQ = enqueue(VQ, Q['id'][ix], -1*val)
-    print("Phase 1 OK!")
+    # print("Phase 1 OK!")
     # 1.11
     for nodeList in gdf.sindex.leaves():
         # Enqueue all obs
@@ -317,12 +317,12 @@ def TDkMaximumVisibility(T,Q,k, gdf, targetPolygon,Boundary,arr):
     while (cont == True):
         nodeId,_ = dequeue(TQ)
         node = getScaledNode(gdf.iloc[nodeId].geometry)
+        obsSet.add(nodeId)
         for qp in VQ.keys():
             if (nodeId in LO[qp]):
                 IOaccess += 1
-                obsSet.add(nodeId)
                 queryPoint_i = getScaledPoint(qp,Q)
-                vrset[qp] = updateVisibility(asPoint2(queryPoint_i),T,arr,vrset[qp],node)
+                vrset[qp] = updateVisibility(asPoint2(queryPoint_i),T,arrg,vrset[qp],node)
                 vrPoly[qp] = buildVRPolygons(vrset[qp],queryPoint_i)
                 val = getLength(vrset[qp], queryPoint_i)
                 VQ = enqueue(VQ, Q['id'][qp], -1*val)
