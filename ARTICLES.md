@@ -2,7 +2,7 @@
 
 ## RTree Basics
 
-- https://geoffboeing.com/2016/10/r-tree-spatial-index-python/
+- [blog reference](https://geoffboeing.com/2016/10/r-tree-spatial-index-python/)
 - Datasets API: [`osmnx`](https://osmnx.readthedocs.io/en/stable/index.html) [1]
 - rtree implementation from [`rtree 0.7.0`](https://toblerity.org/rtree/index.html#)
 
@@ -11,6 +11,7 @@
 - shapely
 - geopandas
 - scikit-geometry (skgeom)
+    [blog reference](https://wolfv.medium.com/introducing-scikit-geometry-ae1dccaad5fd)
 
     ### skgeom Installation
     1. Install CGAL
