@@ -25,7 +25,7 @@ from random import random
 from queue import PriorityQueue
 from shapely.ops import nearest_points
 from shapely.geometry import Polygon,Point, MultiPoint, box
-from skgeom import Point2,Segment2,arrangement,intersection,RotationalSweepVisibility, draw
+from skgeom import Point2,Segment2,arrangement,intersection as skInter,RotationalSweepVisibility, draw
 
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
@@ -54,7 +54,7 @@ def intersectHelper(segment, node:list):
     part1 = Segment2(segment.source().point(), segment.target().point())
 
     for segs in node:
-        isx = intersection(part1, segs)
+        isx = skInter(part1, segs)
         if type(isx) == Segment2:
             ret.append(isx)
 
@@ -226,9 +226,9 @@ def insideVisibleRegion(visibleRegionSet:list, node:Polygon):
                 bool --> True when polygon and VR intersect, False o.w.
     '''
     for vrPolygon in visibleRegionSet:
-        intersection = node.boundary.intersection(vrPolygon.boundary)
-        # print(intersection)
-        if isinstance(intersection,MultiPoint):
+        intersection = node.intersection(vrPolygon)
+        # print(intersection.area)
+        if intersection.area > 0.0:
             return True
     
     return False
@@ -318,12 +318,12 @@ def plotFinal(scaledTarget,rtree1,gdf,qpGdf,vrPolygons,ans_vrPoly,ans):
     ansVRplot = gp.GeoSeries(ansVRlist)
     Aplot = gp.GeoSeries(Alist)
 
-    base = VRplot.plot(color='pink', edgecolor='black',alpha=0.2)
-    base2 = QPplot.plot(ax = base, color='black',markersize=3)
-    base3 = Obsplot.plot(ax = base2, color='cyan', edgecolor='black')
-    base4 = Tplot.plot(ax = base3, color='orange')
-    base5 = Aplot.plot(ax = base4, color='red',markersize=3)
-    base6 = ansVRplot.plot(ax = base5, color='lime', edgecolor='crimson',alpha=0.25)
+    base = VRplot.plot(color='pink', edgecolor='black',alpha=0.2,figsize=(20,20))
+    base2 = QPplot.plot(ax = base, color='black',markersize=3,figsize=(20,20))
+    base3 = Obsplot.plot(ax = base2, color='cyan', edgecolor='black',figsize=(20,20))
+    base4 = Tplot.plot(ax = base3, color='orange',figsize=(20,20))
+    base5 = Aplot.plot(ax = base4, color='red',markersize=3,figsize=(20,20))
+    base6 = ansVRplot.plot(ax = base5, color='lime', edgecolor='crimson',alpha=0.25,figsize=(20,20))
 
 
 # %%

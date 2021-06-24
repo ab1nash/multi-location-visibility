@@ -225,9 +225,9 @@ def insideVisibleRegion(visibleRegionSet:list, node:Polygon):
                 bool --> True when polygon and VR intersect, False o.w.
     '''
     for vrPolygon in visibleRegionSet:
-        intersection = node.boundary.intersection(vrPolygon.boundary)
-        # print(intersection)
-        if isinstance(intersection,MultiPoint):
+        intersection = node.intersection(vrPolygon)
+        # print(intersection.area)
+        if intersection.area > 0.0:
             return True
     
     return False

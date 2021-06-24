@@ -268,12 +268,10 @@ def dequeue(x:{}):
 
 
 # %%
-def QDkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
+def QDkAlgo(T,outer,Q,k, gdf,Boundary):
     '''
         Main algorithm from MV paper: Query Centric Distance based approach
     '''
-    IOaccess = 0
-    obsSet = set()
     kNew = k
     L = []
     L_vis = []
@@ -302,10 +300,9 @@ def QDkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
         if(end == True):
             break
         # Enqueue all obs
-        for nodeId in treeTrav:
+        for nodeId in nodeList[1]:
             # 1.12
             if(nodeId not in CO):
-                IOaccess += 1
                 node = getScaledNode(gdf.iloc[nodeId].geometry)
                 for ix in Q.index:
                     queryPoint = getScaledPoint(ix,Q)
@@ -333,8 +330,6 @@ def QDkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
                 #     return L, L_vis, L_vrPoly, vrPoly
 
             elif (nodeId not in CO):
-                IOaccess += 1
-                obsSet.add(nodeId)
                 node = getScaledNode(gdf.iloc[nodeId].geometry)
                 if(insideVisibleRegion(vrPoly[current_best],node) == True):
                     queryPoint = getScaledPoint(current_best,Q)
@@ -355,5 +350,5 @@ def QDkMaximumVisibility(T,outer,Q,k, gdf,Boundary,treeTrav):
                 val = getLength(vrset[current_best], queryPoint)
                 VQ = enqueue(VQ, Q['id'][current_best], -1*val)
                 cont = False
-    return L, L_vis, L_vrPoly, vrPoly, IOaccess, len(obsSet)
+    return L, L_vis, L_vrPoly, vrPoly, vrset
     # -----------------END--------------------
