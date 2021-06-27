@@ -33,15 +33,19 @@ np.random.seed(2021)
 
 # %% [markdown]
 # ## skgeom functions
-
+'''
+[NOTE]: Accuracy wise, we are considering coordinates upto the 7th decimal place,
+    which translates to a precision error of approximately 1 cm.
+    10^4 in upscaling, plus rounding off to 3 decimal places.
+'''
 # %%
 def asPoint(point2):
-    return Point(point2.bbox().xmax(),point2.bbox().ymax())
+    return Point(round(point2.bbox().xmax(),3),round(point2.bbox().ymax(),3))
 
 
 # %%
 def asPoint2(point):
-    return Point2(point.x,point.y)
+    return Point2(round(point.x,3),round(point.y,3))
 
 
 # %%
@@ -318,12 +322,12 @@ def plotFinal(scaledTarget,rtree1,gdf,qpGdf,vrPolygons,ans_vrPoly,ans):
     ansVRplot = gp.GeoSeries(ansVRlist)
     Aplot = gp.GeoSeries(Alist)
 
-    base = VRplot.plot(color='pink', edgecolor='black',alpha=0.2,figsize=(20,20))
-    base2 = QPplot.plot(ax = base, color='black',markersize=3,figsize=(20,20))
-    base3 = Obsplot.plot(ax = base2, color='cyan', edgecolor='black',figsize=(20,20))
-    base4 = Tplot.plot(ax = base3, color='orange',figsize=(20,20))
-    base5 = Aplot.plot(ax = base4, color='red',markersize=3,figsize=(20,20))
-    base6 = ansVRplot.plot(ax = base5, color='lime', edgecolor='crimson',alpha=0.25,figsize=(20,20))
+    base = VRplot.plot(color='pink', edgecolor='black',alpha=0.2,figsize=(10,10))
+    base2 = QPplot.plot(ax = base, color='black',markersize=3,figsize=(10,10))
+    base3 = Obsplot.plot(ax = base2, color='cyan', edgecolor='black',figsize=(10,10))
+    base4 = Tplot.plot(ax = base3, color='orange',figsize=(10,10))
+    base5 = Aplot.plot(ax = base4, color='red',markersize=3,figsize=(10,10))
+    base6 = ansVRplot.plot(ax = base5, color='lime', edgecolor='crimson',alpha=0.25,figsize=(10,10))
 
 
 # %%

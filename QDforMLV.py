@@ -32,12 +32,12 @@ from skgeom import Point2,Segment2,arrangement,intersection,RotationalSweepVisib
 
 # %%
 def asPoint(point2):
-    return Point(point2.bbox().xmax(),point2.bbox().ymax())
+    return Point(round(point2.bbox().xmax(),3),round(point2.bbox().ymax(),3))
 
 
 # %%
 def asPoint2(point):
-    return Point2(point.x,point.y)
+    return Point2(round(point.x,3),round(point.y,3))
 
 
 # %%
@@ -268,7 +268,7 @@ def dequeue(x:{}):
 
 
 # %%
-def QDkAlgo(T,outer,Q,k, gdf,Boundary):
+def QDkAlgo(T,outer,Q,k, gdf,Boundary, treeNodes):
     '''
         Main algorithm from MV paper: Query Centric Distance based approach
     '''
@@ -295,21 +295,18 @@ def QDkAlgo(T,outer,Q,k, gdf,Boundary):
             VQ = enqueue(VQ, Q['id'][ix], -1*val)
     # print("Phase 1 OK!")
     # 1.11
-    for nodeList in gdf.sindex.leaves():
-        # print('1')
+    for nodeList in range(1):
         if(end == True):
             break
         # Enqueue all obs
-        for nodeId in nodeList[1]:
+        for nodeId in treeNodes:
             # 1.12
-            if(nodeId not in CO):
-                node = getScaledNode(gdf.iloc[nodeId].geometry)
-                for ix in Q.index:
-                    queryPoint = getScaledPoint(ix,Q)
-                    if(Boundary.contains(queryPoint)== True):
-                        if(insideVisibleRegion(vrPoly[ix],node) == True):
-                            LO[ix]=enqueue(LO[ix],nodeId,minDist(queryPoint,node))
-                # CO.add(nodeId)
+            node = getScaledNode(gdf.iloc[nodeId].geometry)
+            for ix in Q.index:
+                queryPoint = getScaledPoint(ix,Q)
+                if(Boundary.contains(queryPoint)== True):
+                    if(insideVisibleRegion(vrPoly[ix],node) == True):
+                        LO[ix]=enqueue(LO[ix],nodeId,minDist(queryPoint,node))
     # -----------------------------------------------------------------
         cont = True # Align with: if node not in CO
         while (cont == True):
@@ -335,6 +332,7 @@ def QDkAlgo(T,outer,Q,k, gdf,Boundary):
                     queryPoint = getScaledPoint(current_best,Q)
                     vrset[current_best] = updateVisibility(asPoint2(queryPoint),T,outer,vrset[current_best],node)
                     vrPoly[current_best] = buildVRPolygons(vrset[current_best],queryPoint)
+                    # DO NOT change this to Q.index, WA
                     for qp in VQ.keys():
                         index = qp
                         if (insideVisibleRegion(vrPoly[index],node) == True):

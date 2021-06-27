@@ -12,6 +12,7 @@
 - geopandas
 - scikit-geometry (skgeom)
     [blog reference](https://wolfv.medium.com/introducing-scikit-geometry-ae1dccaad5fd)
+- [Rotational sweep visibility](https://doc.cgal.org/latest/Visibility_2/classCGAL_1_1Rotational__sweep__visibility__2.html): Theoretical background for implementation
 
     ### skgeom Installation
     1. Install CGAL
