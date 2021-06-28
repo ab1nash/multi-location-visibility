@@ -280,17 +280,6 @@ def getImpactRatio(vrOld:list, vrNew:list, queryPoint:Point):
 
 # %%
 def plotFinal(scaledTarget,rtree1,gdf,qpGdf,vrPolygons,ans_vrPoly,ans):
-    '''
-        Plotting routine
-        Plot scaled Target: Polygon
-        Plot scaled Obstacles: Polygons
-        Plot scaled Query Points: Points
-        Plot retrieved Query Points: Points
-        Plot query point visibility polygons: Polygons (already scaled)
-
-        Append everything to a geoseries and plot it.
-    '''
-
     Tlist = []
     Tlist.append(scaledTarget)
     Obslist = []
@@ -322,13 +311,22 @@ def plotFinal(scaledTarget,rtree1,gdf,qpGdf,vrPolygons,ans_vrPoly,ans):
     ansVRplot = gp.GeoSeries(ansVRlist)
     Aplot = gp.GeoSeries(Alist)
 
-    base = VRplot.plot(color='pink', edgecolor='black',alpha=0.2,figsize=(10,10))
-    base2 = QPplot.plot(ax = base, color='black',markersize=3,figsize=(10,10))
+    base = QPplot.plot(color='black',markersize=3,figsize=(10,10))
+    oddf = 1
+    for x, y, label in zip(QPplot.x, QPplot.y, qpGdf.id):
+        if oddf:
+            base.annotate(label, xy=(x, y), xytext=(3, 3), textcoords="offset points",alpha=0.8)
+            oddf = 0
+        else:
+            base.annotate(label, xy=(x, y), xytext=(-9, -9), textcoords="offset points",alpha=0.8)
+            oddf = 1
+
+    base2 = VRplot.plot(ax=base, color='pink', edgecolor='black',alpha=0.2,figsize=(10,10))
+    # base3 = QPplot.plot(ax = base2, color='black',markersize=3,figsize=(10,10))
     base3 = Obsplot.plot(ax = base2, color='cyan', edgecolor='black',figsize=(10,10))
     base4 = Tplot.plot(ax = base3, color='orange',figsize=(10,10))
     base5 = Aplot.plot(ax = base4, color='red',markersize=3,figsize=(10,10))
     base6 = ansVRplot.plot(ax = base5, color='lime', edgecolor='crimson',alpha=0.25,figsize=(10,10))
-
 
 # %%
 
