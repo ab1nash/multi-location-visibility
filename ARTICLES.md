@@ -3,7 +3,7 @@
 ## RTree Basics
 
 - [blog reference](https://geoffboeing.com/2016/10/r-tree-spatial-index-python/)
-- Datasets API: [`osmnx`](https://osmnx.readthedocs.io/en/stable/index.html) [1]
+- osmnx, a geodata API: [`osmnx`](https://osmnx.readthedocs.io/en/stable/index.html) [1]
 - rtree implementation from [`rtree 0.7.0`](https://toblerity.org/rtree/index.html#)
 
 ## Visibility operations
