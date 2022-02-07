@@ -1,4 +1,3 @@
-Citation:
 _Gangumalla, L., Reddy, P.K. & Mondal, A. Multi-location visibility query processing using portion-based transactional modeling and pattern mining. Data Min Knowl Disc 33, 1393–1416 (2019). https://doi.org/10.1007/s10618-019-00641-3_
 
 
